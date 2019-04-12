@@ -1,0 +1,9 @@
+<ul>
+  <%= for player <- @players do %>
+      <li>
+        <button phx-click="<%= @click_value %>" phx-value="<%= player %>">
+          <%= @action %> <%= player %>
+        </button>
+      </li>
+  <% end %>
+</ul>

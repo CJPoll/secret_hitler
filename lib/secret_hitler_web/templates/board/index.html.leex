@@ -1,0 +1,40 @@
+<%= if Board.complete?(@board) do %>
+  <%= case Board.victor(@board) do %>
+    <% :fascist -> %>
+      <span class="fascist-victory-message">Fascists Win! </span>
+      <br/>
+
+    <% :liberal -> %>
+      <span class="liberal-victory-message">Liberals Win! </span>
+      <br/>
+
+  <% end %>
+<% end %>
+
+Draw Deck Size: <%= Board.draw_pile_size(@board) %>
+<br/>
+Discard Pile Size: <%= Board.discard_pile_size(@board) %>
+
+<br/>
+
+<%= unless Board.complete?(@board) do %>
+  Failed Elections: <%= Board.failed_elections(@board) %>
+  <br/>
+  <button phx-click="fail-election">Fail Election</button>
+  <button phx-click="succeed-election">Succeed Election</button>
+
+  <br/>
+
+  <ol>
+    <%= for policy <- Board.peek(@board, 3) do %>
+      <li>
+        <%= policy.team %>
+        <button phx-click="keep-<%= policy.team %>">Keep</button>
+      </li>
+    <% end %>
+  </ol>
+<% end %>
+
+<%= render("fascist_board.html", assigns) %>
+<%= render("liberal_board.html", assigns) %>
+

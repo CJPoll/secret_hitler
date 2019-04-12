@@ -1,0 +1,7 @@
+<div id="nominating-chancellor">
+  <span id="nominating-chancellor-text">
+    <%= Game.current_player(@game) %> is nominating a Chancellor.
+  </span>
+</div>
+
+<%= select_player(Game.eligible_for_nomination(@game), assigns, "nominate", "Nominate") %>

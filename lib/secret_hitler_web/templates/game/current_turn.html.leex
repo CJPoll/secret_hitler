@@ -1,0 +1,34 @@
+<%= case @game.state do %>
+  <% :nominating_chancellor -> %>
+    <%= render("nominating_chancellor.html", assigns) %>
+
+  <% :electing_government -> %>
+    <%= render("electing_government.html", assigns) %>
+
+  <% :president_discarding -> %>
+    <%= render("president_discarding.html", assigns) %>
+
+  <% :chancellor_discarding -> %>
+    <%= render("chancellor_discarding.html", assigns) %>
+
+  <% :liberal_victory -> %>
+    <%= render("liberal_victory.html", assigns) %>
+
+  <% :fascist_victory -> %>
+    <%= render("fascist_victory.html", assigns) %>
+
+  <% :investigate_loyalty_choose -> %>
+    <%= render("investigate_loyalty_choose.html", assigns) %>
+
+  <% :investigate_loyalty -> %>
+    <%= render("investigate_loyalty.html", assigns) %>
+
+  <% :special_election -> %>
+    <%= render("special_election.html", assigns) %>
+
+  <% :policy_peek -> %>
+    <%= render("policy_peek.html", assigns) %>
+
+  <% :execution -> %>
+    <%= render("execution.html", assigns) %>
+<% end %>

@@ -1,0 +1,15 @@
+<div id="chancellor-discarding">
+  <span id="chancellor-discarding-text">
+    <%= @game.nomination %> is discarding a policy.
+  </span>
+
+  <ol>
+    <%= for policy <- Game.policy_choices(@game) do %>
+      <li>
+        <button phx-click="discard" phx-value="<%= policy.team %>">
+          Discard <%= policy.team %>
+        </button>
+      </li>
+    <% end %>
+  </ol>
+</div>

@@ -1,0 +1,12 @@
+<h2> Liberal Board </h2>
+<div class="liberal-board">
+  <%= for n <- 1..5 do %>
+  <div class="<%= if n <= Board.liberal_policies_enacted(@board) do %>
+    liberal-card
+  <% else %>
+    liberal-slot
+  <% end %>">
+      stuff
+    </div>
+  <% end %>
+</div>

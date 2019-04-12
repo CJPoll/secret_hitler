@@ -1,0 +1,6 @@
+<h3>Investigate Loyalty</h3>
+
+<%= Game.current_player(@game) %> is choosing whose loyalty to investigate.
+<br/>
+
+<%= select_player(Game.eligible_for_investigation(@game), assigns, "investigate", "Investigate") %>

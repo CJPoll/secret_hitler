@@ -1,0 +1,6 @@
+<h3>Special Election</h3>
+
+<%= Game.current_player(@game) %> is choosing the president for a special
+election.
+
+<%= select_player(Game.eligible_for_special_election(@game), assigns, "special-election", "Nominate") %>

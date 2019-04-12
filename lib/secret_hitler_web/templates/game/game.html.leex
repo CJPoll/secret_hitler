@@ -1,0 +1,29 @@
+<%= render("current_turn.html", assigns) %>
+
+<br/>
+
+<%= for {_investigator, investigated} <- @game.investigations do %>
+  <%= investigated %> is a <%= Game.team_for(@game, investigated) %> <br />
+<% end %>
+
+<br/>
+
+Failed Elections: <%= Board.failed_elections(@game.board) %>
+
+<br/>
+
+Draw Pile Size: <%= Board.draw_pile_size(@game.board) %>
+
+<br/>
+
+Discard Pile Size: <%= Board.discard_pile_size(@game.board) %>
+
+<br/>
+<br/>
+
+Hitler: <%= @game.hitler %>
+<br/>
+Fascists: <%= Enum.join(@game.fascists, ", ") %>
+
+<%= render(SecretHitlerWeb.BoardView, "fascist_board.html", board: @game.board) %>
+<%= render(SecretHitlerWeb.BoardView, "liberal_board.html", board: @game.board) %>

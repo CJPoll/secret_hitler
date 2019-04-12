@@ -1,0 +1,42 @@
+<h2>Turn Order</h2>
+
+<ol>
+  <%= for player <- @game.players do %>
+    <li>
+      <%= player %> <%= if Game.executed?(@game, player), do: "(executed)", else: "" %>
+    </li>
+  <% end %>
+</ol>
+
+<%= cond do %>
+  <% @current_player == nil -> %>
+    You are a spectator
+  <% @game.state == :fascist_victory  -> %>
+    <%= render("fascist_victory.html", assigns) %>
+  <% @game.state == :liberal_victory  -> %>
+    <%= render("liberal_victory.html", assigns) %>
+  <% discarding?(@game, @current_player) -> %>
+    <%= render("_discard.html", assigns) %>
+  <% nominating_chancellor?(@game, @current_player) -> %>
+    <%= render("nominating_chancellor.html", assigns) %>
+  <% voting?(@game, @current_player) -> %>
+   <%= render("electing_government.html", assigns) %>
+  <% special_election?(@game, @current_player) -> %>
+    <%= render("special_election.html", assigns) %>
+  <% policy_peek?(@game, @current_player) -> %>
+    <%= render("policy_peek.html", assigns) %>
+  <% execution?(@game, @current_player) -> %>
+    <%= render("execution.html", assigns) %>
+  <% true -> %>
+    <%= Game.current_player(@game) %>'s turn
+<% end %>
+
+<br/>
+
+Draw Deck Size: <%= Board.draw_pile_size(@game.board) %>
+<br/>
+Discard Pile Size: <%= Board.discard_pile_size(@game.board) %>
+<br/>
+
+<%= render(SecretHitlerWeb.BoardView, "fascist_board.html", board: @game.board) %>
+<%= render(SecretHitlerWeb.BoardView, "liberal_board.html", board: @game.board) %>

@@ -1,0 +1,19 @@
+Hi <%= @current_player %>! 👋
+
+<br/>
+
+<%= unless @current_player == @owner do %>
+  Just waiting for the game to start.
+<% end %>
+
+<ul>
+  <%= for player <- @players do %>
+    <li><%= player %> <%= if player == @owner, do: "(owner)", else: "" %></li>
+  <% end %>
+</ul>
+
+<%= if @current_player == @owner do %>
+  <button phx-click="start-game" <%= if length(@players) < 5, do: "disabled", else: "" %>>
+    Start Game!
+  </button>
+<% end %>

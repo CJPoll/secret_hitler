@@ -1,0 +1,8 @@
+<%= cond do %>
+  <% game_started?(@game) -> %>
+    <%= render("board.html", assigns) %>
+  <% registered?(@current_player) -> %>
+    <%= render("_waiting.html", assigns) %>
+  <% true -> %>
+    <%= render("_registration.html", assigns) %>
+<% end %>

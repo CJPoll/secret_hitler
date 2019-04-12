@@ -1,0 +1,12 @@
+<h2> Fascist Board </h2>
+<div class="fascist-board">
+  <%= for n <- 1..6 do %>
+  <div class="<%= if n <= Board.fascist_policies_enacted(@board) do %>
+    fascist-card
+    <% else %>
+      fascist-slot
+      <% end %>">
+      stuff
+    </div>
+  <% end %>
+</div>
