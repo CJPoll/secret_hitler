@@ -1,9 +1,7 @@
 <ol>
   <%= for policy <- Game.policy_choices(@game) |> IO.inspect do %>
     <li>
-      <button phx-click="discard" phx-value="<%= policy.team %>">
-        <%= policy.team %>
-      </button>
+      <%= button(team_color(policy.team), "discard", policy.team, policy.team) %>
     </li>
   <% end %>
 </ol>

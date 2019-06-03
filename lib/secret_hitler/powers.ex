@@ -7,6 +7,10 @@ defmodule SecretHitler.Powers do
     nil
   end
 
+  def current_power(_player_count, 6) do
+    fascist_victory()
+  end
+
   def current_power(player_count, fascist_card_count)
       when player_count <= 6 and fascist_card_count < 3 do
     nil
@@ -65,5 +69,9 @@ defmodule SecretHitler.Powers do
 
   def execution do
     :execution
+  end
+
+  def fascist_victory do
+    :fascist_victory
   end
 end

@@ -11,55 +11,7 @@ end
 defmodule SecretHitler.Games.Worker do
   use GenServer
   use Undefined
-
-  defmodule State do
-    alias SecretHitler.{Game, GameSetup}
-    defstruct [:game, :owner, game_setup: GameSetup.new(), observers: MapSet.new(), hosts: %{}]
-
-    def add_observer(%__MODULE__{} = state, pid) do
-      observers = MapSet.put(state.observers, pid)
-      %__MODULE__{state | observers: observers}
-    end
-
-    def game_started?(%__MODULE__{game: nil}), do: false
-    def game_started?(%__MODULE__{game: %Game{}}), do: true
-
-    def player_name(%__MODULE__{hosts: hosts}, host_id) do
-      hosts[host_id]
-    end
-
-    def add_player_name(%__MODULE__{game: nil, hosts: hosts} = state, host_id, player) do
-      hosts = Map.update(hosts, host_id, player, fn _ -> player end)
-      %__MODULE__{state | hosts: hosts}
-    end
-
-    def owner(%__MODULE__{owner: owner} = state) do
-      player_name(state, owner)
-    end
-
-    def players(%__MODULE__{game: nil, hosts: hosts}) do
-      Map.values(hosts)
-    end
-
-    def players(%__MODULE__{game: game}) do
-      game.players
-    end
-
-    def remove_observer(%__MODULE__{} = state, pid) do
-      observers = MapSet.delete(state.observers, pid)
-      %__MODULE__{state | observers: observers}
-    end
-
-    def rpc(%__MODULE__{game: %Game{} = game} = state, function, args) do
-      game = apply(Game, function, [game | args])
-      %__MODULE__{state | game: game}
-    end
-
-    def start_game(%__MODULE__{} = state) do
-      game = GameSetup.to_game(state.game_setup)
-      %__MODULE__{state | game: game}
-    end
-  end
+  alias SecretHitler.Session
 
   def ensure_exists(game_name, host_id) do
     case start_link(game_name) do
@@ -88,10 +40,12 @@ defmodule SecretHitler.Games.Worker do
     %{id: game_name, start: {__MODULE__, :start_link, [game_name]}}
   end
 
-  alias SecretHitler.{GameSetup, Game}
-
   def start() do
     GenServer.start(__MODULE__, [])
+  end
+
+  def start(game_name) do
+    GenServer.start(__MODULE__, [], name: String.to_atom(game_name))
   end
 
   def start_link(game_name) do
@@ -104,6 +58,18 @@ defmodule SecretHitler.Games.Worker do
 
   def join(ref, name, host_id) do
     GenServer.call(ref, {:join, name, host_id})
+  end
+
+  def kick(ref, player) do
+    GenServer.cast(ref, {:kick, player})
+  end
+
+  def move_up(ref, player) do
+    GenServer.cast(ref, {:move_up, player})
+  end
+
+  def move_down(ref, player) do
+    GenServer.cast(ref, {:move_down, player})
   end
 
   def player_for_host(ref, host_id) do
@@ -134,92 +100,113 @@ defmodule SecretHitler.Games.Worker do
 
   def init(_args) do
     :timer.send_after(:timer.hours(2), :shutdown)
-    {:ok, %State{}}
+    {:ok, Session.new()}
   end
 
   def handle_call(
         {:join, player, host_id},
         _from,
-        %State{game: nil, game_setup: setup} = old_state
+        %Session{} = old_session
       ) do
-    new_state = %State{old_state | game_setup: GameSetup.add_player(setup, player)}
-    new_state = State.add_player_name(new_state, host_id, player)
+    new_session = Session.add_player(old_session, player, host_id)
 
-    notify_on_update(old_state, new_state)
+    notify_on_update(old_session, new_session)
 
-    {:reply, :ok, new_state}
+    {:reply, :ok, new_session}
   end
 
-  def handle_call(:start, _from, %State{game: nil, game_setup: setup} = state) do
-    state = %State{state | game_setup: GameSetup.to_game(setup)}
-    {:reply, :ok, state}
+  def handle_call(:start, _from, %Session{} = session) do
+    session = Session.start(session)
+    {:reply, :ok, session}
   end
 
-  def handle_call(:game, _from, %State{game: game} = state) do
-    {:reply, game, state}
+  def handle_call(:game, _from, %Session{game: game} = session) do
+    {:reply, game, session}
   end
 
-  def handle_call(:observers, _from, %State{observers: observers} = state) do
-    {:reply, observers, state}
+  def handle_call(:observers, _from, %Session{observers: observers} = session) do
+    {:reply, observers, session}
   end
 
-  def handle_call(:owner, _from, %State{} = state) do
-    owner = State.owner(state)
-    {:reply, owner, state}
+  def handle_call(:owner, _from, %Session{} = session) do
+    owner = Session.owner(session)
+    {:reply, owner, session}
   end
 
-  def handle_call({:owner, host_id}, _from, %State{} = state) do
-    state = %State{state | owner: host_id}
-    {:reply, :ok, state}
+  def handle_call({:owner, host_id}, _from, %Session{} = session) do
+    session = Session.owner(session, host_id)
+    {:reply, :ok, session}
   end
 
-  def handle_call(:players, _from, %State{} = state) do
-    {:reply, State.players(state), state}
+  def handle_call(:players, _from, %Session{} = session) do
+    {:reply, Session.players(session), session}
   end
 
-  def handle_call({:player_name, host_id}, _from, %State{} = state) do
-    {:reply, State.player_name(state, host_id), state}
+  def handle_call({:player_name, host_id}, _from, %Session{} = session) do
+    {:reply, Session.player_name(session, host_id), session}
   end
 
-  def handle_cast({:rpc, function_name, args}, %State{} = old_state) do
-    new_state = State.rpc(old_state, function_name, args)
-    notify_on_update(old_state, new_state)
-    {:noreply, new_state}
+  def handle_cast({:kick, player}, %Session{} = old_session) do
+    new_session = Session.kick(old_session, player)
+
+    notify_on_update(old_session, new_session)
+
+    {:noreply, new_session}
   end
 
-  def handle_cast({:observe, pid}, %State{} = old_state) do
+  def handle_cast({:move_up, player}, %Session{} = old_session) do
+    new_session = Session.move_up(old_session, player)
+    notify_on_update(old_session, new_session)
+
+    {:noreply, new_session}
+  end
+
+  def handle_cast({:move_down, player}, %Session{} = old_session) do
+    new_session = Session.move_down(old_session, player)
+    notify_on_update(old_session, new_session)
+
+    {:noreply, new_session}
+  end
+
+  def handle_cast({:rpc, function_name, args}, %Session{} = old_session) do
+    new_session = Session.rpc(old_session, function_name, args)
+    notify_on_update(old_session, new_session)
+    {:noreply, new_session}
+  end
+
+  def handle_cast({:observe, pid}, %Session{} = old_session) do
     Process.monitor(pid)
-    new_state = State.add_observer(old_state, pid)
+    new_session = Session.add_observer(old_session, pid)
 
-    notify_on_update(old_state, new_state)
+    notify_on_update(old_session, new_session)
 
-    {:noreply, new_state}
+    {:noreply, new_session}
   end
 
-  def handle_cast(:start_game, %State{} = old_state) do
-    new_state = State.start_game(old_state)
-    notify_on_update(old_state, new_state)
-    {:noreply, new_state}
+  def handle_cast(:start_game, %Session{} = old_session) do
+    new_session = Session.start_game(old_session)
+    notify_on_update(old_session, new_session)
+    {:noreply, new_session}
   end
 
-  def handle_info({:DOWN, _ref, :process, pid, _reason}, %State{} = state) do
-    state = State.remove_observer(state, pid)
-    {:noreply, state}
+  def handle_info({:DOWN, _ref, :process, pid, _reason}, %Session{} = session) do
+    session = Session.remove_observer(session, pid)
+    {:noreply, session}
   end
 
-  def handle_info(:shutdown, %State{} = state) do
-    {:stop, :normal, state}
+  def handle_info(:shutdown, %Session{} = session) do
+    {:stop, :normal, session}
   end
 
-  def handle_info(msg, state) do
+  def handle_info(msg, session) do
     IO.inspect("Unexpected message: #{inspect(msg)}", label: "#{__MODULE__}")
-    {:noreply, state}
+    {:noreply, session}
   end
 
-  defp notify_on_update(state, state), do: :ok
+  defp notify_on_update(session, session), do: :ok
 
-  defp notify_on_update(_old_state, new_state) do
-    Enum.each(new_state.observers, &notify(&1, new_state.game))
+  defp notify_on_update(_old_session, new_session) do
+    Enum.each(new_session.observers, &notify(&1, new_session.game))
   end
 
   defp notify(observer, game) do

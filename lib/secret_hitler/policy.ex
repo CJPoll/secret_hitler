@@ -1,6 +1,13 @@
 defmodule SecretHitler.Policy do
   defstruct [:team]
 
+  @typedoc """
+  `team` can be one of 2 values:
+    - "liberal"
+    - "fascist"
+  """
+  @type t :: %__MODULE__{team: String.t()}
+
   @allowed_teams ["liberal", "fascist"]
 
   def liberal do

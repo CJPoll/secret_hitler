@@ -1,4 +1,1 @@
-<%= Game.current_player(@game) %> is selecting a victim for execution.
-
-<%= select_player(Game.eligible_for_execution(@game), assigns,
-"execute", "Execute") %>
+<%= select_player(Game.eligible_for_execution(@game), assigns, "execute", "Execute") %>

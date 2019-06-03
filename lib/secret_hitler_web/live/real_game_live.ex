@@ -28,6 +28,8 @@ defmodule SecretHitlerWeb.RealGameLive do
       |> assign(:pid, pid)
       |> assign(:players, players)
       |> assign(:spectator, game != nil and current_player == nil)
+      |> assign(:show_info, true)
+      |> assign(:show_knowledge, false)
 
     {:ok, socket}
   end
@@ -37,8 +39,13 @@ defmodule SecretHitlerWeb.RealGameLive do
     players = Worker.players(socket.assigns.pid)
     owner = Worker.owner(socket.assigns.pid)
 
+    current_player =
+      Worker.player_for_host(socket.assigns.pid, socket.assigns.host_id)
+      |> IO.inspect(label: "Current Player")
+
     socket =
       socket
+      |> update(:current_player, fn _ -> current_player end)
       |> update(:game, fn _ -> game end)
       |> update(:players, fn _ -> players end)
       |> update(:owner, fn _ -> owner end)
@@ -95,6 +102,29 @@ defmodule SecretHitlerWeb.RealGameLive do
 
   def handle_event("start-game", _, socket) do
     Worker.start_game(socket.assigns.pid)
+    {:noreply, socket}
+  end
+
+  def handle_event("toggle-info", _, socket) do
+    {:noreply, update(socket, :show_info, &(not &1))}
+  end
+
+  def handle_event("toggle-knowledge", _, socket) do
+    {:noreply, update(socket, :show_knowledge, &(not &1))}
+  end
+
+  def handle_event("kick", player, socket) do
+    Worker.kick(socket.assigns.pid, player)
+    {:noreply, socket}
+  end
+
+  def handle_event("move-up", player, socket) do
+    Worker.move_up(socket.assigns.pid, player)
+    {:noreply, socket}
+  end
+
+  def handle_event("move-down", player, socket) do
+    Worker.move_down(socket.assigns.pid, player)
     {:noreply, socket}
   end
 end

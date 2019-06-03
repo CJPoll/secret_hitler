@@ -6,14 +6,24 @@ Hi <%= @current_player %>! 👋
   Just waiting for the game to start.
 <% end %>
 
-<ul>
+<ol>
   <%= for player <- @players do %>
-    <li><%= player %> <%= if player == @owner, do: "(owner)", else: "" %></li>
+    <li>
+      <%= player %>
+      <%= if player == @owner, do: "(owner)", else: "" %>
+      <%= if @current_player == @owner and player != @current_player do %>
+        <span phx-click="kick" phx-value="<%= player %>">❌</span>
+      <% end %>
+      <%= if @current_player == @owner do %>
+        <button phx-click="move-up" phx-value="<%= player %>">🔼</button>
+        <button phx-click="move-down" phx-value="<%= player %>">🔽</button>
+      <% end %>
+    </li>
   <% end %>
-</ul>
+</ol>
 
 <%= if @current_player == @owner do %>
-  <button phx-click="start-game" <%= if length(@players) < 5, do: "disabled", else: "" %>>
+  <button class="btn btn-primary" phx-click="start-game" <%= if length(@players) < 5, do: "disabled", else: "" %>>
     Start Game!
   </button>
 <% end %>

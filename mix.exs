@@ -27,6 +27,7 @@ defmodule SecretHitler.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.0"},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.4.0"},

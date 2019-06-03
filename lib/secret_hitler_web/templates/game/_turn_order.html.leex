@@ -1,0 +1,19 @@
+<%= if @show_info do %>
+  <%= button(:blue, "toggle-info", nil, "Hide Turn Order") %>
+  <br/>
+  <h2>Turn Order</h2>
+  <ol>
+    <%= for player <- @game.players do %>
+      <li>
+        <%= player %>
+        <%= if Game.executed?(@game, player), do: "(executed)", else: "" %>
+        <%= if player == Game.current_player(@game) do %>
+        <--- Current Player
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+<% else %>
+  <%= button(:blue, "toggle-info", nil, "Show Turn Order") %>
+  <br/>
+<% end %>

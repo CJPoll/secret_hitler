@@ -8,6 +8,8 @@ defmodule SecretHitler.Board do
     failed_elections: 0
   ]
 
+  @type t :: %__MODULE__{}
+
   def new do
     %__MODULE__{policy_deck: PolicyDeck.starting_deck()}
   end

@@ -1,12 +1,37 @@
-<h2>Turn Order</h2>
-
-<ol>
-  <%= for player <- @game.players do %>
-    <li>
-      <%= player %> <%= if Game.executed?(@game, player), do: "(executed)", else: "" %>
-    </li>
+<%= if @show_knowledge do %>
+  <%= button(:blue, "toggle-knowledge", nil, "Hide Game Knowledge") %>
+  <br/>
+  <%= cond do %>
+    <% @show_knowledge == false -> %>
+      <%= "" %>
+    <% Game.hitler?(@game, @current_player) -> %>
+      <%= render "_hitler_knowledge.html", assigns %>
+    <% Game.fascist?(@game, @current_player) -> %>
+      <%= render "_fascist_knowledge.html", assigns %>
+    <% Game.liberal?(@game, @current_player) -> %>
+      <%= render "_liberal_knowledge.html", assigns %>
+    <% Game.spectator?(@game, @current_player) -> %>
+      <%= render "_spectator_knowledge.html", assigns %>
   <% end %>
-</ol>
+<% else %>
+  <%= button(:blue, "toggle-knowledge", nil, "Show Game Knowledge") %>
+  <br/>
+<% end %>
+<br/>
+
+<%= render "_turn_order.html", assigns %>
+
+<br/>
+
+<%= unless (investigations = Game.investigated_players(@game, @current_player)) == [] do %>
+<ul>
+  <%= for investigated <- investigations do %>
+    <li><%= investigated %> is a <%= Game.team_for(@game, investigated) %></li>
+  <% end %>
+</ul>
+<% end %>
+
+<%= render("_current_turn_knowledge.html", assigns) %>
 
 <%= cond do %>
   <% @current_player == nil -> %>
@@ -15,6 +40,10 @@
     <%= render("fascist_victory.html", assigns) %>
   <% @game.state == :liberal_victory  -> %>
     <%= render("liberal_victory.html", assigns) %>
+  <% special_election?(@game, @current_player) -> %>
+    <%= render("special_election.html", assigns) %>
+  <% investigate_loyalty?(@game, @current_player) -> %>
+    <%= render("investigate_loyalty.html", assigns) %>
   <% discarding?(@game, @current_player) -> %>
     <%= render("_discard.html", assigns) %>
   <% nominating_chancellor?(@game, @current_player) -> %>
@@ -27,15 +56,21 @@
     <%= render("policy_peek.html", assigns) %>
   <% execution?(@game, @current_player) -> %>
     <%= render("execution.html", assigns) %>
-  <% true -> %>
-    <%= Game.current_player(@game) %>'s turn
+  <% true -> %> <%= "" %>
 <% end %>
 
 <br/>
 
-Draw Deck Size: <%= Board.draw_pile_size(@game.board) %>
+Failed Elections: <%= Board.failed_elections(@game.board) %>
+
 <br/>
+
+Draw Deck Size: <%= Board.draw_pile_size(@game.board) %>
+
+<br/>
+
 Discard Pile Size: <%= Board.discard_pile_size(@game.board) %>
+
 <br/>
 
 <%= render(SecretHitlerWeb.BoardView, "fascist_board.html", board: @game.board) %>

@@ -22,7 +22,9 @@ Discard Pile Size: <%= Board.discard_pile_size(@game.board) %>
 <br/>
 
 Hitler: <%= @game.hitler %>
+
 <br/>
+
 Fascists: <%= Enum.join(@game.fascists, ", ") %>
 
 <%= render(SecretHitlerWeb.BoardView, "fascist_board.html", board: @game.board) %>

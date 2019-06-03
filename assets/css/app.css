@@ -3,6 +3,11 @@
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
+li
+{
+  margin-bottom: 8px;
+}
+
 .fascist-board
 {
   height: 100px;

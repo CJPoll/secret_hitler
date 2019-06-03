@@ -1,10 +1,4 @@
-<div id="electing-government">
-  <span id="electing-government-text">
-    <%= Game.current_player(@game) %> nominates <%= @game.nomination %> as Chancellor.
-  </span>
-</div>
-
+<%= button(:blue, "vote", "ja", "Ja") %>
 <br/>
-
-<button phx-click="vote" phx-value="ja">Ja</button>
-<button phx-click="vote" phx-value="nein">Nein</button>
+<br/>
+<%= button(:red, "vote", "nein", "Nein") %>

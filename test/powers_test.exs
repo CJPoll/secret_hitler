@@ -12,6 +12,7 @@ defmodule SecretHitler.Powers.Test do
       assert @test_module.policy_peek() == @test_module.current_power(@player_count, 3)
       assert @test_module.execution == @test_module.current_power(@player_count, 4)
       assert @test_module.execution == @test_module.current_power(@player_count, 5)
+      assert @test_module.fascist_victory == @test_module.current_power(@player_count, 6)
     end
 
     @player_count 6
@@ -22,6 +23,7 @@ defmodule SecretHitler.Powers.Test do
       assert @test_module.policy_peek() == @test_module.current_power(@player_count, 3)
       assert @test_module.execution == @test_module.current_power(@player_count, 4)
       assert @test_module.execution == @test_module.current_power(@player_count, 5)
+      assert @test_module.fascist_victory == @test_module.current_power(@player_count, 6)
     end
   end
 
@@ -34,6 +36,7 @@ defmodule SecretHitler.Powers.Test do
       assert @test_module.special_election() == @test_module.current_power(@player_count, 3)
       assert @test_module.execution == @test_module.current_power(@player_count, 4)
       assert @test_module.execution == @test_module.current_power(@player_count, 5)
+      assert @test_module.fascist_victory == @test_module.current_power(@player_count, 6)
     end
 
     @player_count 8
@@ -44,6 +47,7 @@ defmodule SecretHitler.Powers.Test do
       assert @test_module.special_election() == @test_module.current_power(@player_count, 3)
       assert @test_module.execution == @test_module.current_power(@player_count, 4)
       assert @test_module.execution == @test_module.current_power(@player_count, 5)
+      assert @test_module.fascist_victory == @test_module.current_power(@player_count, 6)
     end
   end
 
@@ -56,6 +60,7 @@ defmodule SecretHitler.Powers.Test do
       assert @test_module.special_election() == @test_module.current_power(@player_count, 3)
       assert @test_module.execution == @test_module.current_power(@player_count, 4)
       assert @test_module.execution == @test_module.current_power(@player_count, 5)
+      assert @test_module.fascist_victory == @test_module.current_power(@player_count, 6)
     end
 
     @player_count 10
@@ -66,6 +71,7 @@ defmodule SecretHitler.Powers.Test do
       assert @test_module.special_election() == @test_module.current_power(@player_count, 3)
       assert @test_module.execution == @test_module.current_power(@player_count, 4)
       assert @test_module.execution == @test_module.current_power(@player_count, 5)
+      assert @test_module.fascist_victory == @test_module.current_power(@player_count, 6)
     end
   end
 end

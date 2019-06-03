@@ -1,9 +1,7 @@
 <ul>
   <%= for player <- @players do %>
       <li>
-        <button phx-click="<%= @click_value %>" phx-value="<%= player %>">
-          <%= @action %> <%= player %>
-        </button>
+        <%= button(:blue, @click_value, player, Enum.join([@action, " ", player], "")) %>
       </li>
   <% end %>
 </ul>

@@ -34,9 +34,6 @@ defmodule SecretHitlerWeb.GameView do
     Game.voting?(game, player)
   end
 
-  defp team_class("fascist"), do: "btn-danger"
-  defp team_class("liberal"), do: "btn-primary"
-
   defp special_election?(game, player) do
     Game.special_election?(game, player)
   end
@@ -45,7 +42,40 @@ defmodule SecretHitlerWeb.GameView do
     Game.policy_peek?(game, player)
   end
 
+  defp investigate_loyalty?(game, player) do
+    Game.investigate_loyalty?(game, player)
+  end
+
   defp execution?(game, player) do
     Game.execution?(game, player)
+  end
+
+  defp fascist_count(game) do
+    length(game.fascists)
+  end
+
+  defp liberal_count(game) do
+    length(game.players) - length(game.fascists)
+  end
+
+  defp team_color("liberal"), do: :blue
+  defp team_color("fascist"), do: :red
+
+  defp button(:red, click, value, text) do
+    button("btn btn-danger", click, value, text)
+  end
+
+  defp button(:blue, click, value, text) do
+    button("btn btn-primary", click, value, text)
+  end
+
+  defp button(class, click, value, text) do
+    if value do
+      raw(
+        "<button class=\"#{class}\" phx-click=\"#{click}\" phx-value=\"#{value}\">#{text}</button>"
+      )
+    else
+      raw("<button class=\"#{class}\" phx-click=\"#{click}\">#{text}</button>")
+    end
   end
 end

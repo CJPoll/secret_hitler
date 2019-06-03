@@ -1,0 +1,13 @@
+In this game, there are <%= liberal_count(@game) %> liberals and <%= fascist_count(@game) %> fascists.
+<br/>
+You are a fascist.
+
+The other fascists are:
+<ol>
+  <%= for fascist <- Game.fascists(@game) -- [@current_player] do %>
+    <li>
+      <%= fascist %>
+      <%= if Game.hitler?(@game, fascist), do: "<--- Hitler", else: "" %>
+    </li>
+  <% end %>
+</ol>
