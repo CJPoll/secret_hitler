@@ -19,5 +19,6 @@ defmodule SecretHitlerWeb.Router do
 
     get "/:game_name", PageController, :index
     get "/", PageController, :index
+    get "/health", PageController, :health
   end
 end

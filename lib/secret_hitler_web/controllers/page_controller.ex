@@ -19,6 +19,10 @@ defmodule SecretHitlerWeb.PageController do
     redirect(conn, to: Routes.page_path(conn, :index, game_name))
   end
 
+  def health(conn, _) do
+    send_resp(conn, 200, "")
+  end
+
   defp host_id(%Plug.Conn{req_cookies: %{"host_id" => host_id}}), do: host_id
   defp host_id(%Plug.Conn{resp_cookies: %{"host_id" => %{"value" => host_id}}}), do: host_id
   defp host_id(%Plug.Conn{resp_cookies: %{"host_id" => host_id}}), do: host_id

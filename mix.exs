@@ -38,7 +38,7 @@ defmodule SecretHitler.MixProject do
       {:phoenix_pubsub, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
-      {:schemata, git: "git@github.com:cjpoll/schemata", ref: "cody/new-schemata"},
+      {:schemata, git: "https://github.com/cjpoll/schemata", ref: "cody/new-schemata"},
       {:uuid, "~> 1.1.0"}
     ]
   end
