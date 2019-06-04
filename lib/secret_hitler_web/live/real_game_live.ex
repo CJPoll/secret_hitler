@@ -28,7 +28,7 @@ defmodule SecretHitlerWeb.RealGameLive do
       |> assign(:pid, pid)
       |> assign(:players, players)
       |> assign(:spectator, game != nil and current_player == nil)
-      |> assign(:show_info, true)
+      |> assign(:show_info, false)
       |> assign(:show_knowledge, false)
 
     {:ok, socket}

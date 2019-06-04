@@ -10,7 +10,7 @@ defmodule SecretHitler.GameBuilder do
     hitler = pick_hitler(fascists)
 
     %Game{
-      board: Board.new(),
+      board: Board.new(length(players)),
       discards: [],
       executed_players: [],
       fascists: fascists,

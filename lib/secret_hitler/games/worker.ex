@@ -206,6 +206,7 @@ defmodule SecretHitler.Games.Worker do
   defp notify_on_update(session, session), do: :ok
 
   defp notify_on_update(_old_session, new_session) do
+    IO.inspect(new_session, label: "Session")
     Enum.each(new_session.observers, &notify(&1, new_session.game))
   end
 

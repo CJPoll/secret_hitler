@@ -5,8 +5,8 @@
     fascist-card
     <% else %>
       fascist-slot
-      <% end %>">
-      stuff
+    <% end %>">
+      <%= power(SecretHitler.Powers.current_power(Board.player_count(@board), n)) %>
     </div>
   <% end %>
 </div>

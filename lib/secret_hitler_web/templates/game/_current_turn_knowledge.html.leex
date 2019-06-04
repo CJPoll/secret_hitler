@@ -1,15 +1,21 @@
 <%= cond do %>
   <% Game.president_discarding?(@game) -> %>
+    <%= render("_election_result.html", assigns) %>
     President <%= Game.president(@game) %> is discarding a card.
     <br/>
 
   <% Game.chancellor_discarding?(@game) -> %>
+    <%= render("_election_result.html", assigns) %>
     Chancellor <%= Game.chancellor(@game) %> is discarding a card.
     <br/>
 
   <% Game.president_nominating?(@game) -> %>
+    <%= render("_election_result.html", assigns) %>
     <%= Game.president(@game) %> is nominating a chancellor.
     <br/>
+
+  <% Game.policy_peek?(@game) -> %>
+    <%= Game.president(@game) %> is peeking at the top 3 policies.
 
   <% Game.voting?(@game) and not is_nil(@current_player) -> %>
     <%= Game.president(@game) %> nominates <%= Game.chancellor(@game) %> for

@@ -1,7 +1,5 @@
 <h3>Policy Peek</h3>
 
-<%= Game.current_player(@game) %> is peeking at the top 3 policies
-
 <ol>
   <%= for policy <- Game.policy_choices(@game) do %>
     <li> <%= policy.team %> </li>

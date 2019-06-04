@@ -27,5 +27,7 @@ Hitler: <%= @game.hitler %>
 
 Fascists: <%= Enum.join(@game.fascists, ", ") %>
 
-<%= render(SecretHitlerWeb.BoardView, "fascist_board.html", board: @game.board) %>
-<%= render(SecretHitlerWeb.BoardView, "liberal_board.html", board: @game.board) %>
+<%= render(SecretHitlerWeb.BoardView, "fascist_board.html", board: @game.board,
+game: @game) %>
+<%= render(SecretHitlerWeb.BoardView, "liberal_board.html", board: @game.board,
+game: @game) %>

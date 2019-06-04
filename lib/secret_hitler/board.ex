@@ -3,6 +3,7 @@ defmodule SecretHitler.Board do
 
   defstruct [
     :policy_deck,
+    :player_count,
     fascist_policies_enacted: 0,
     liberal_policies_enacted: 0,
     failed_elections: 0
@@ -10,13 +11,15 @@ defmodule SecretHitler.Board do
 
   @type t :: %__MODULE__{}
 
-  def new do
-    %__MODULE__{policy_deck: PolicyDeck.starting_deck()}
+  def new(player_count) do
+    %__MODULE__{policy_deck: PolicyDeck.starting_deck(), player_count: player_count}
   end
 
   def complete?(%__MODULE__{} = board) do
     fascist_policies_enacted(board) >= 6 or liberal_policies_enacted(board) >= 5
   end
+
+  def player_count(%__MODULE__{player_count: player_count}), do: player_count
 
   def victor(%__MODULE__{} = board) do
     cond do

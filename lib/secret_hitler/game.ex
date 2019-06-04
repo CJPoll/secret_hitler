@@ -303,7 +303,7 @@ defmodule SecretHitler.Game do
   @spec nominate(t, player) :: t
   def nominate(%__MODULE__{state: :nominating_chancellor} = game, player) do
     if player in eligible_for_nomination(game) do
-      %__MODULE__{game | nomination: player, state: :electing_government}
+      %__MODULE__{game | nomination: player, state: :electing_government, votes: %{}}
     else
       game
     end
@@ -375,11 +375,9 @@ defmodule SecretHitler.Game do
 
     cond do
       everyone_voted?(game) and election_results(votes) == :ja ->
-        game = %__MODULE__{game | votes: %{}}
         election_succeeded(game)
 
       everyone_voted?(game) and election_results(votes) == :nein ->
-        game = %__MODULE__{game | votes: %{}}
         election_failed(game)
 
       true ->
@@ -457,6 +455,8 @@ defmodule SecretHitler.Game do
   end
 
   def policy_peek?(%__MODULE__{}, _player), do: false
+
+  def policy_peek?(%__MODULE__{state: state}), do: state == :policy_peek
 
   def special_election?(%__MODULE__{state: :special_election} = game, player) do
     current_player(game) == player
@@ -699,6 +699,10 @@ defmodule SecretHitler.Game do
     player in players_who_voted(game)
   end
 
+  def waiting_on_vote(%__MODULE__{} = game) do
+    living_players(game) -- players_who_voted(game)
+  end
+
   @doc """
   For the current election:
 
@@ -709,5 +713,9 @@ defmodule SecretHitler.Game do
   @spec player_vote(t, player) :: vote_string | nil
   def player_vote(%__MODULE__{votes: votes}, player) do
     votes[player]
+  end
+
+  def votes(%__MODULE__{votes: votes} = game) do
+    votes
   end
 end

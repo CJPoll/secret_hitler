@@ -1,4 +1,14 @@
-<%= button(:blue, "vote", "ja", "Ja") %>
+Waiting for:
+<ul>
+  <%= for player <- Game.waiting_on_vote(@game) do %>
+  <li><%= player %></li>
+  <% end %>
+</ul>
+
+<br/>
+
+<%= button(:blue, "vote", "ja", if(Game.player_vote(@game, @current_player) == "nein", do: "Change vote to Ja", else: "Ja")) %>
 <br/>
 <br/>
-<%= button(:red, "vote", "nein", "Nein") %>
+<%= button(:red, "vote", "nein", if(Game.player_vote(@game, @current_player) ==
+"ja", do: "Change vote to Nein", else: "Nein")) %>
