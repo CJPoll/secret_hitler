@@ -1,7 +1,7 @@
 defmodule SecretHitler.Games.Supervisor do
   use DynamicSupervisor
 
-  alias SecretHitler.Games.Worker
+  alias SecretHitler.Games.Agent
 
   def start_link(_) do
     DynamicSupervisor.start_link(__MODULE__, [], name: __MODULE__)

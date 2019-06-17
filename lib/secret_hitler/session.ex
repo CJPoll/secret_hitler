@@ -1,15 +1,16 @@
 defmodule SecretHitler.Session do
   alias SecretHitler.{Game, GameSetup}
 
-  defstruct [:game, :owner, game_setup: GameSetup.new(), observers: MapSet.new(), hosts: %{}]
+  defstruct [
+    :game,
+    :name,
+    :owner,
+    game_setup: GameSetup.new(),
+    hosts: %{}
+  ]
 
-  def new do
-    %__MODULE__{}
-  end
-
-  def add_observer(%__MODULE__{} = session, pid) do
-    observers = MapSet.put(session.observers, pid)
-    %__MODULE__{session | observers: observers}
+  def new(name) do
+    %__MODULE__{name: name}
   end
 
   def add_player(
@@ -71,12 +72,7 @@ defmodule SecretHitler.Session do
     game.players
   end
 
-  def remove_observer(%__MODULE__{} = session, pid) do
-    observers = MapSet.delete(session.observers, pid)
-    %__MODULE__{session | observers: observers}
-  end
-
-  def rpc(%__MODULE__{game: %Game{} = game} = session, function, args) do
+  def game_function(%__MODULE__{game: %Game{} = game} = session, function, args) do
     game = apply(Game, function, [game | args])
     %__MODULE__{session | game: game}
   end
