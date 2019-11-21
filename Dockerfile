@@ -11,9 +11,10 @@ WORKDIR /app
 
 COPY mix.exs mix.exs
 COPY mix.lock mix.lock
-COPY config config
+RUN mix deps.get
 
-RUN mix do deps.get, deps.compile
+COPY config config
+RUN mix deps.compile
 
 COPY . .
 

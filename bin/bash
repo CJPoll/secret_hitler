@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+
+host="${1}"
+
+if [ -z "${host}" ]; then
+  host="localhost"
+fi
+
+docker run \
+  -it \
+  -e HOST="${host}" \
+  -e MIX_ENV=prod \
+  -e SECRET_HITLER_SIGNING_SALT=+z1IfkU5EAg/G1/EEZqhZdFldCZIURV9vKDYSxn9Y3bkQIhLbez7Fma/G0it5p7M \
+  secret-hitler-game \
+  bash
