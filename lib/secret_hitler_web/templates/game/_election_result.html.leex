@@ -1,14 +1,18 @@
+<%= if Game.votes(@game) == %{} do %>
+  No votes
+<% end %>
+
 <%= unless Game.votes(@game) == %{} do %>
-Voted Ja 👍
-<ul>
-  <%= for {voter, vote} <- Game.votes(@game), vote == "ja" do %>
-    <li><%= voter %></li>
-  <% end %>
-</ul>
-Voted Nein 👎
-<ul>
-  <%= for {voter, vote} <- Game.votes(@game), vote == "nein" do %>
-    <li><%= voter %></li>
-  <% end %>
-</ul>
+  Voted Ja 👍
+  <ul>
+    <%= for {voter, vote} <- Game.votes(@game), vote == "ja" do %>
+      <li><%= voter %></li>
+    <% end %>
+  </ul>
+  Voted Nein 👎
+  <ul>
+    <%= for {voter, vote} <- Game.votes(@game), vote == "nein" do %>
+      <li><%= voter %></li>
+    <% end %>
+  </ul>
 <% end %>

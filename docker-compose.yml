@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    restart: always
+    command: mix phx.server
+    env_file:
+      - .env
+    ports:
+      - "80:4000"

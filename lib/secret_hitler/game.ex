@@ -718,4 +718,8 @@ defmodule SecretHitler.Game do
   def votes(%__MODULE__{votes: votes} = game) do
     votes
   end
+
+  def total_player_count(%__MODULE__{players: players}) do
+    length(players)
+  end
 end

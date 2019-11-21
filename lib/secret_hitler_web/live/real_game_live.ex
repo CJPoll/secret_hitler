@@ -111,7 +111,7 @@ defmodule SecretHitlerWeb.RealGameLive do
   end
 
   def handle_event("toggle-knowledge", _, socket) do
-    {:noreply, update(socket, :show_knowledge, &(not &1))}
+    {:noreply, update(socket, :show_knowledge, &((not &1) |> IO.inspect(label: "Show Knowledge?")))}
   end
 
   def handle_event("kick", player, socket) do

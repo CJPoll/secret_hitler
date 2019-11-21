@@ -69,9 +69,9 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 # Configure your database
-config :secret_hitler, SecretHitler.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "secret_hitler_dev",
-  hostname: "localhost",
-  pool_size: 10
+#config :secret_hitler, SecretHitler.Repo,
+#  username: "postgres",
+#  password: "postgres",
+#  database: "secret_hitler_dev",
+#  hostname: "localhost",
+#  pool_size: 10

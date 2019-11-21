@@ -10,7 +10,7 @@
     <br/>
 
   <% Game.president_nominating?(@game) -> %>
-    <%= render("_election_result.html", assigns) %>
+    <%= render("_election_result.html", assigns) |> IO.inspect(label: "Election Result") %>
     <%= Game.president(@game) %> is nominating a chancellor.
     <br/>
 
