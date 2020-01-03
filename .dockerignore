@@ -1,4 +1,4 @@
 _build/
 deps/
 .env
-Dockerfile
+assets/node_modules/

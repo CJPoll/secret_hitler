@@ -1,5 +1,6 @@
 defmodule SecretHitler do
   @moduledoc """
+
   SecretHitler keeps the contexts that define your domain
   and business logic.
 
